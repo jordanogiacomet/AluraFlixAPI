@@ -18,14 +18,7 @@ class VideoController extends Controller
         return response()->json($videos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      */
@@ -61,20 +54,38 @@ class VideoController extends Controller
             return response()->json($video);
         }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'titulo' => 'max:30',
+            'descricao' => 'max:255',
+            'url' => 'url'
+        ]);
+
+        $video = Video::find($id);
+
+        if($video === null){
+            return response()->json([
+                'message' => 'Não encontrado.'
+            ]);
+            } else {
+            
+            if(array_key_exists('titulo', $validatedData)){
+                $video->titulo = $validatedData['titulo'];
+            }
+            if(array_key_exists('descricao', $validatedData)){
+                $video->descricao = $validatedData['descricao'];
+            }
+            if(array_key_exists('url', $validatedData)){
+                $video->url = $validatedData['url'];
+            }
+            $video->save();
+            return response()->json($video);
+        }
     }
 
     /**
