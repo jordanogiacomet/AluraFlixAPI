@@ -24,10 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/videos', [VideoController::class, 'index']);
 Route::get('/videos/{id}', [VideoController::class, 'show']);
-Route::post('/criar', [VideoController::class, 'store']);
+Route::post('/criar-video', [VideoController::class, 'store']);
 Route::put('/atualizar/{id}', [VideoController::class, 'update']);
 Route::delete('/deletar/{id}', [VideoController::class, 'destroy']);
 
 // Categorias
 
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::post('/criar-categoria', [CategoryController::class, 'store']);

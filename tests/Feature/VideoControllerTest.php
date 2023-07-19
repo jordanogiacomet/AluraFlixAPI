@@ -31,7 +31,7 @@ class VideoControllerTest extends TestCase
         $controller = new VideoController();
     
         // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
-        $request = Request::create("/api/criar", 'POST', [
+        $request = Request::create("/api/criar-video", 'POST', [
             'titulo' => 'Meu vídeo',
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
