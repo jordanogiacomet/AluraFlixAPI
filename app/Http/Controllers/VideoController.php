@@ -31,7 +31,16 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'titulo' => 'required|max:30',
+            'descricao' => 'required|max:255',
+            'url' => 'required|url'
+        ]);
+
+        $video = Video::create($validatedData);
+
+        return response()->json($validatedData);
+
     }
 
     /**
