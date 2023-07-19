@@ -13,25 +13,29 @@ class VideoController extends Controller
      */
     public function index()
     {
+        // Obtém todos os vídeos do banco de dados
         $videos = Video::all();
 
+        // Retorna os vídeos em formato JSON
         return response()->json($videos);
     }
 
-   
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
             'titulo' => 'required|max:30',
             'descricao' => 'required|max:255',
             'url' => 'required|url'
         ]);
 
+        // Cria um novo vídeo no banco de dados com os dados validados
         $video = Video::create($validatedData);
 
+        // Retorna os dados validados em formato JSON
         return response()->json($validatedData);
 
     }
@@ -41,49 +45,56 @@ class VideoController extends Controller
      */
     public function show(string $id)
     {
+        // Busca o vídeo com base no ID fornecido no banco de dados
         $video = DB::table('videos')
                         ->where('id', $id)
                         ->get();
 
-        if($video->isEmpty()){
+        // Verifica se o vídeo não foi encontrado
+        if ($video->isEmpty()) {
             return response()->json([
                 'message' => 'Não encontrado.'
             ]);
         }
 
-            return response()->json($video);
-        }
-
+        // Retorna o vídeo encontrado em formato JSON
+        return response()->json($video);
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
+        // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
             'titulo' => 'max:30',
             'descricao' => 'max:255',
             'url' => 'url'
         ]);
 
+        // Busca o vídeo com base no ID fornecido no banco de dados
         $video = Video::find($id);
 
-        if($video === null){
+        // Verifica se o vídeo não foi encontrado
+        if ($video === null) {
             return response()->json([
                 'message' => 'Não encontrado.'
             ]);
-            } else {
-            
-            if(array_key_exists('titulo', $validatedData)){
+        } else {
+            // Atualiza os campos do vídeo com base nos dados validados
+            if (array_key_exists('titulo', $validatedData)) {
                 $video->titulo = $validatedData['titulo'];
             }
-            if(array_key_exists('descricao', $validatedData)){
+            if (array_key_exists('descricao', $validatedData)) {
                 $video->descricao = $validatedData['descricao'];
             }
-            if(array_key_exists('url', $validatedData)){
+            if (array_key_exists('url', $validatedData)) {
                 $video->url = $validatedData['url'];
             }
             $video->save();
+            
+            // Retorna o vídeo atualizado em formato JSON
             return response()->json($video);
         }
     }
@@ -93,14 +104,19 @@ class VideoController extends Controller
      */
     public function destroy(string $id)
     {
+        // Busca o vídeo com base no ID fornecido no banco de dados
         $video = Video::find($id);
 
-        if($video === null){
+        // Verifica se o vídeo não foi encontrado
+        if ($video === null) {
             return response()->json([
                 'message' => 'Não encontrado.'
             ]);
         } else {
+            // Deleta o vídeo do banco de dados
             $video->delete();
+
+            // Retorna uma resposta de sucesso em formato JSON
             return response()->json([
                 'message' => 'Success'
             ]);

@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
     {
 
 
-        $this->call(VideoSeeder::class);
+       
         $this->call(CategorySeeder::class);
+        $this->call(VideoSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

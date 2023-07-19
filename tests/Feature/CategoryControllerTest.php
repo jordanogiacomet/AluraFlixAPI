@@ -56,4 +56,42 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testUpdate()
+    {
+        // Criação de uma instância do controlador
+        $controller = new CategoryController();
+    
+        // Definição do ID da categoria a ser atualizada
+        $id = '2';
+    
+        // Criação de um objeto de requisição simulada para a rota '/api/atualizar-categoria' com método PUT e dados de exemplo
+        $request = Request::create("/api/atualizar-categoria", 'PUT', [
+            'titulo' => 'Minha categoria',
+            'cor' => 'Minha cor'
+        ]);
+    
+        // Chamada do método update() no controlador com a requisição simulada e o ID da categoria
+        $response = $controller->update($request, $id);
+    
+        // Verificação do status da resposta, esperando que seja 200 (OK)
+        $this->assertEquals(200, $response->status());
+    
+        // Verificação se os dados atualizados estão presentes no banco de dados
+        $this->assertDatabaseHas('categories', [
+            'titulo' => 'Minha categoria',
+            'cor' => 'Minha cor'
+        ]);
+    }
+
+    public function testDestroy()
+    {
+        // Define o ID da categoria a ser deletada
+        $id = '3';
+    
+        // Faz uma requisição DELETE para a rota '/api/deletar-categoria/{id}' substituindo '{id}' pelo valor do ID definido
+        $response = $this->delete("/api/deletar-categoria/{$id}");
+    
+        // Verifica se o status da resposta é 200 (OK)
+        $this->assertEquals(200, $response->status());
+    }
 }

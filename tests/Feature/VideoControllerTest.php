@@ -57,7 +57,7 @@ class VideoControllerTest extends TestCase
     $id = '2';
 
     // Faz uma requisição GET para a rota '/api/deletar/{$id}'
-    $response = $this->delete("/api/deletar/{$id}");
+    $response = $this->delete("/api/deletar-video/{$id}");
 
     // Verifica se o status da resposta é 200 (OK)
     $this->assertEquals(200, $response->status());
@@ -73,7 +73,7 @@ public function testUpdate()
     $id = '2';
 
     // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
-    $request = Request::create("/api/criar", 'POST', [
+    $request = Request::create("/api/atualizar-video", 'PUT', [
         'titulo' => 'Meu vídeo',
         'descricao' => 'Descrição do vídeo',
         'url' => 'https://www.example.com/video'

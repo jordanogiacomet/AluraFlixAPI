@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('categoriaId');
+            $table->foreign('categoriaId')->references('id')->on('categories');
             $table->string('titulo');
             $table->text('descricao');
             $table->string('url');
@@ -25,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('videos', function (Blueprint $table) {
+            $table->dropForeign(['categoriaId']);
+        });
+
         Schema::dropIfExists('videos');
     }
 };

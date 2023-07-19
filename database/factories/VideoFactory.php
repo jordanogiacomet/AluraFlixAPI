@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,7 +18,12 @@ class VideoFactory extends Factory
      */
     public function definition(): array
     {
+
+        // Obtenha um ID aleatório de uma categoria existente
+        $categoriaId = Category::inRandomOrder()->first()->id;
+
         return [
+            'categoriaId' => $categoriaId,
             'titulo' => fake()->name(),
             'descricao' => Str::random(10),
             'url' => Str::random(10),
