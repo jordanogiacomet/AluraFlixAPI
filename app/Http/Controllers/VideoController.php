@@ -93,6 +93,17 @@ class VideoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $video = Video::find($id);
+
+        if($video === null){
+            return response()->json([
+                'message' => 'Não encontrado.'
+            ]);
+        } else {
+            $video->delete();
+            return response()->json([
+                'message' => 'Success'
+            ]);
+        }
     }
 }
