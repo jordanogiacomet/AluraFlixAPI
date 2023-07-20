@@ -80,13 +80,26 @@ class VideoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        if((!$request->filled('titulo')) && (!$request->filled('descricao')) && (!$request->filled('url'))){
+            return response()->json([
+                'message' => 'Pelo menos um campo deve ser preenchido para a edicão'
+            ], 400);
+        }
+
+
+
         // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
-            'categoriaId' => 'required|exists:categories,id',
+            'categoriaId' => 'sometimes|required|exists:categories,id',
             'titulo' => 'max:30',
             'descricao' => 'max:255',
             'url' => 'url'
         ]);
+
+        if(!$request->has('categoriaId')){
+                $validatedData['categoriaId'] = 1;
+            }
 
         // Busca o vídeo com base no ID fornecido no banco de dados
         $video = Video::find($id);
@@ -95,7 +108,7 @@ class VideoController extends Controller
         if ($video === null) {
             return response()->json([
                 'message' => 'Não encontrado.'
-            ]);
+            ], 404);
         } else {
             // Atualiza os campos do vídeo com base nos dados validados
             if (array_key_exists('categoriaId', $validatedData)) {
@@ -113,7 +126,7 @@ class VideoController extends Controller
             $video->save();
 
             // Retorna o vídeo atualizado em formato JSON
-            return response()->json($video);
+            return response()->json($video, 200);
         }
     }
 
@@ -156,9 +169,9 @@ class VideoController extends Controller
         if ($videos->isEmpty()) {
             return response()->json([
                 'message' => 'Nenhum vídeo encontrado'
-            ]);
+            ], 404);
         }
 
-        return response()->json($videos);
+        return response()->json($videos, 200);
     }
 }

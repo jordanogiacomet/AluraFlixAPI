@@ -108,6 +108,54 @@ public function testUpdate()
         'descricao' => 'Descrição do vídeo',
         'url' => 'https://www.example.com/video'
     ]);
-}
+
+    $requestWithError = Request::create("/api/atualizar-video", 'PUT', [
+        'categoriaId' => '5',
+    ]);
+    $responseWithError = $controller->update($requestWithError, $id);
+     // Verificação se a resposta é de erro de validação (status 400)
+    $this->assertEquals(400, $responseWithError->status());
+
+
+    $requestWithOneParameter = Request::create('/api/atualizar-video', 'PUT', [
+        'titulo' => 'Meu video'
+    ]);
+    $responseWithOneParameter = $controller->update($requestWithOneParameter, $id);
+    $this->assertEquals(200, $responseWithOneParameter->status());
+
+    $requestWithoutCategoryId = Request::create("/api/atualizar-video", 'PUT', [
+        'titulo' => 'Meu vídeo',
+        'descricao' => 'Descrição do vídeo',
+        'url' => 'https://www.example.com/video'
+    ]);
+    $responseWithoutCategoryId = $controller->update($requestWithoutCategoryId, $id);
+     // Verificação se a resposta é de erro de validação (status 400)
+    $this->assertEquals(200, $responseWithoutCategoryId->status());
+
+    $requestWithInvalidVideoId = Request::create("/api/atualizar-video", 'PUT', [
+        'categoriaId' => '1',
+        'titulo' => 'Meu vídeo',
+        'descricao' => 'Descrição do vídeo',
+        'url' => 'https://www.example.com/video'
+    ]);
+
+    $responseWithInvalidVideoId = $controller->update($requestWithInvalidVideoId, '100000000');
+    $this->assertEquals(404, $responseWithInvalidVideoId->status());
+    }
+
+    public function testSearchVideos(){
+        $controller = new VideoController();
+        $request = Request::create('/api/buscar-videos?search=video', 'GET');
+        $response = $controller->searchVideos($request);
+
+        $this->assertEquals(200, $response->status());
+
+        $requestNotFound = Request::create('/api/buscar-videos?search=categoria', 'GET');
+
+        $responseNotFound = $controller->searchVideos($requestNotFound);
+
+        $this->assertEquals(404, $responseNotFound->status());
+    }
+
 
 }

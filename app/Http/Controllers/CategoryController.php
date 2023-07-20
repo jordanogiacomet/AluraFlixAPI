@@ -47,8 +47,8 @@ class CategoryController extends Controller
             return response()->json($validatedData);
        } catch (ValidationException $e) {
             return response()->json([
-                'message' => 'O campo não pode estar em branco.'
-         ]);
+                'errors' => $e->errors(),
+         ], 422);
        } 
     }
 
@@ -78,41 +78,55 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Valida os dados recebidos na requisição
-        $validatedData = $request->validate([
-            'titulo' => 'max:15',
-            'cor' => 'max:15'
-        ]);
 
-        // Busca a categoria com base no ID fornecido no banco de dados
-        $category = Category::find($id);
 
-        // Verifica se a categoria não foi encontrada
-        if ($category === null) {
+        if(empty($request->all())){
             return response()->json([
-                'message' => 'Não encontrado.'
-            ]);
-        } else {
-            // Atualiza os campos da categoria com base nos dados validados
-            if (array_key_exists('titulo', $validatedData) && ($category->id != 1)) {
-                $category->titulo = $validatedData['titulo'];
-            }
-            if (array_key_exists('cor', $validatedData)) {
-                $category->cor = $validatedData['cor'];
-            }
-            $category->save();   
-            
-            if($category->id == 1){
-                return response()->json([
-                    'message' => 'O título da categoria com id = 1 não pode ser atualizado',
-                    'category' => $category
-                ]);
-            }
-
-
-            // Retorna a categoria atualizada em formato JSON
-            return response()->json($category);
+                'message' => 'Não foi possivel editar essa categoria'
+            ], 400);
         }
+
+        try{
+            // Valida os dados recebidos na requisição
+            $validatedData = $request->validate([
+                'titulo' => 'max:15',
+                'cor' => 'max:15'
+            ]);
+
+            // Busca a categoria com base no ID fornecido no banco de dados
+            $category = Category::find($id);
+
+            // Verifica se a categoria não foi encontrada
+            if ($category === null) {
+                return response()->json([
+                    'message' => 'Não encontrado.'
+                ], 404);
+            } else {
+                // Atualiza os campos da categoria com base nos dados validados
+                if (array_key_exists('titulo', $validatedData) && ($category->id != 1)) {
+                    $category->titulo = $validatedData['titulo'];
+                }
+                if (array_key_exists('cor', $validatedData)) {
+                    $category->cor = $validatedData['cor'];
+                }
+                $category->save();   
+                
+                if($category->id == 1){
+                    return response()->json([
+                        'message' => 'O título da categoria com id = 1 não pode ser atualizado',
+                        'category' => $category
+                    ]);
+                }
+
+
+                // Retorna a categoria atualizada em formato JSON
+                return response()->json($category);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'errors' => $e->errors(),
+         ], 422);
+       } 
     }
 
     /**
@@ -145,9 +159,9 @@ class CategoryController extends Controller
         if(!$category){
             return response()->json([
                 'message' => 'Categoria não encontrada.'
-            ]);
+            ], 404);
         }
         $videos = $category->videos;
-        return response()->json($videos);
+        return response()->json($videos, 200);
     }
 }

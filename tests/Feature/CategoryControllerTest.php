@@ -20,7 +20,7 @@ class CategoryControllerTest extends TestCase
 
 
     public function testStore()
-{
+    {
     // Criação de uma instância do controlador
     $controller = new CategoryController();
 
@@ -41,6 +41,17 @@ class CategoryControllerTest extends TestCase
         'titulo' => 'Minha categoria',
         'cor' => 'Minha cor'
     ]);
+
+    $requestWithError = Request::create("/api/criar-categoria", 'POST', [
+        'cor' => 'Minha cor'
+    ]);
+
+    $responseWithError = $controller->store($requestWithError);
+
+    $this->assertEquals(422, $responseWithError->status());
+
+
+
 }
 
 
@@ -81,6 +92,32 @@ class CategoryControllerTest extends TestCase
             'titulo' => 'Minha categoria',
             'cor' => 'Minha cor'
         ]);
+
+        $requestWithOneParameter = Request::create('/api/atualizar-categoria', 'PUT', [
+            'titulo' => 'Minha categoria'
+        ]);
+        $responseWithOneParameter = $controller->update($requestWithOneParameter, $id);
+        $this->assertEquals(200, $responseWithOneParameter->status());
+
+        $requestWithValidationError = Request::create('/api/atualizar-categoria', 'PUT', [
+            'titulo' => 'Minha categoria com mais de 15 caracteres'
+        ]);
+        $responseWithValidationError = $controller->update($requestWithValidationError, $id);
+        $this->assertEquals(422, $responseWithValidationError->status());
+
+        $requestWithError = Request::create('/api/atualizar-categoria', 'PUT', []);
+        $responseWithError = $controller->update($requestWithError, $id);
+        $this->assertEquals(400, $responseWithError->status());
+
+
+        $requestWithInvalidCategoryId = Request::create("/api/atualizar-categoria", 'PUT', [
+            'titulo' => 'Minha categoria',
+            'cor' => 'Minha cor'
+        ]);
+    
+        $responseWithInvalidCategoryId = $controller->update($requestWithInvalidCategoryId, '100000000');
+        $this->assertEquals(404, $responseWithInvalidCategoryId->status());
+
     }
 
     public function testDestroy()
@@ -93,5 +130,15 @@ class CategoryControllerTest extends TestCase
     
         // Verifica se o status da resposta é 200 (OK)
         $this->assertEquals(200, $response->status());
+    }
+
+    public function testIndexVideosByCategory(){
+        $controller = new CategoryController();
+        $id = '1';
+        $response = $this->get("/api/categories/{$id}/videos");
+        $response->assertStatus(200);
+
+        $responseWithError = $this->get("/api/categories/1000000000/videos");
+        $responseWithError->assertStatus(404);
     }
 }
