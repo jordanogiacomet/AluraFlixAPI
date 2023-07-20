@@ -27,7 +27,7 @@ Route::get('/videos/{id}', [VideoController::class, 'show']);
 Route::post('/criar-video', [VideoController::class, 'store']);
 Route::put('/atualizar-video/{id}', [VideoController::class, 'update']);
 Route::delete('/deletar-video/{id}', [VideoController::class, 'destroy']);
-Route::get('/buscar-videos/{nome}', [VideoController::class, 'searchVideos']);
+Route::get('/buscar-videos', [VideoController::class, 'searchVideos']);
 
 // Categorias
 

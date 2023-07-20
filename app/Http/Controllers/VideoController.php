@@ -138,8 +138,11 @@ class VideoController extends Controller
     /**
      * Search videos by name.
      */
-    public function searchVideos(string $nome)
+    public function searchVideos(Request $request)
     {
+
+        $nome = $request->query('search');
+
         $videos = DB::table('videos')
             ->where('titulo', 'LIKE', '%' . $nome . '%')
             ->get();
