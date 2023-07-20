@@ -51,6 +51,19 @@ class VideoControllerTest extends TestCase
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
         ]);
+
+        $requestWithError = Request::create("/api/criar-video", 'POST', [
+            'categoriaId' => '35',
+            'descricao' => 'Descrição do vídeo',
+            'url' => 'https://www.example.com/video'
+        ]);
+
+        $responseWithError = $controller->store($requestWithError);
+
+         // Verificação se a resposta é de erro de validação (status 422)
+        $this->assertEquals(422, $responseWithError->status());
+
+
     } 
     
     public function testDestroy()

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+
 
 class VideoController extends Controller
 {
@@ -24,7 +26,8 @@ class VideoController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+{
+    try {
         // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
             'categoriaId' => 'required|exists:categories,id',
@@ -38,8 +41,13 @@ class VideoController extends Controller
 
         // Retorna os dados validados em formato JSON
         return response()->json($validatedData);
-
+    } catch (ValidationException $e) {
+        // Captura a exceção de validação e retorna a resposta com os erros
+        return response()->json([
+            'errors' => $e->errors(),
+        ], 422); // Código HTTP 422 Unprocessable Entity indica erro de validação
     }
+}
 
     /**
      * Display the specified resource.
