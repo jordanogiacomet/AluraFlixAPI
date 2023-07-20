@@ -32,6 +32,7 @@ class VideoControllerTest extends TestCase
     
         // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
         $request = Request::create("/api/criar-video", 'POST', [
+            'categoriaId' => '5',
             'titulo' => 'Meu vídeo',
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
@@ -45,6 +46,7 @@ class VideoControllerTest extends TestCase
     
         // Verificação se os dados inseridos na requisição estão presentes no banco de dados
         $this->assertDatabaseHas('videos', [
+            'categoriaId' => '5',
             'titulo' => 'Meu vídeo',
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
@@ -54,7 +56,7 @@ class VideoControllerTest extends TestCase
     public function testDestroy()
 {
     // Define o ID do vídeo a ser deletado
-    $id = '2';
+    $id = '3';
 
     // Faz uma requisição GET para a rota '/api/deletar/{$id}'
     $response = $this->delete("/api/deletar-video/{$id}");
@@ -74,6 +76,7 @@ public function testUpdate()
 
     // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
     $request = Request::create("/api/atualizar-video", 'PUT', [
+        'categoriaId' => '1',
         'titulo' => 'Meu vídeo',
         'descricao' => 'Descrição do vídeo',
         'url' => 'https://www.example.com/video'
@@ -87,6 +90,7 @@ public function testUpdate()
 
     // Verificação se os dados atualizados estão presentes no banco de dados
     $this->assertDatabaseHas('videos', [
+        'categoriaId' => '1',
         'titulo' => 'Meu vídeo',
         'descricao' => 'Descrição do vídeo',
         'url' => 'https://www.example.com/video'

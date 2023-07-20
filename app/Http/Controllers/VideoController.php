@@ -27,6 +27,7 @@ class VideoController extends Controller
     {
         // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
+            'categoriaId' => 'required|exists:categories,id',
             'titulo' => 'required|max:30',
             'descricao' => 'required|max:255',
             'url' => 'required|url'
@@ -68,6 +69,7 @@ class VideoController extends Controller
     {
         // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
+            'categoriaId' => 'required|exists:categories,id',
             'titulo' => 'max:30',
             'descricao' => 'max:255',
             'url' => 'url'
@@ -83,6 +85,9 @@ class VideoController extends Controller
             ]);
         } else {
             // Atualiza os campos do vídeo com base nos dados validados
+            if (array_key_exists('categoriaId', $validatedData)) {
+                $video->categoriaId = $validatedData['categoriaId'];
+            }
             if (array_key_exists('titulo', $validatedData)) {
                 $video->titulo = $validatedData['titulo'];
             }
