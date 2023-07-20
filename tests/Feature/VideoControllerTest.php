@@ -9,8 +9,10 @@ use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+
 class VideoControllerTest extends TestCase
-{
+{   
+    use RefreshDatabase;
     public function testIndex()
     {
         // Chamada da rota para a função index
@@ -85,7 +87,7 @@ public function testUpdate()
     $controller = new VideoController();
 
     // Definição do ID do vídeo a ser atualizado
-    $id = '2';
+    $id = '6';
 
     // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
     $request = Request::create("/api/atualizar-video", 'PUT', [
