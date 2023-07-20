@@ -29,11 +29,17 @@ class VideoController extends Controller
         try {
             // Valida os dados recebidos na requisição
             $validatedData = $request->validate([
-                'categoriaId' => 'required|exists:categories,id',
+                'categoriaId' => 'sometimes|required|exists:categories,id',
                 'titulo' => 'required|max:30',
                 'descricao' => 'required|max:255',
                 'url' => 'required|url'
             ]);
+
+
+            if(!$request->has('categoriaId')){
+                $validatedData['categoriaId'] = 1;
+            }
+
 
             // Cria um novo vídeo no banco de dados com os dados validados
             $video = Video::create($validatedData);

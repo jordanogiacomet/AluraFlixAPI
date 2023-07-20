@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
@@ -26,16 +27,29 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         // Valida os dados recebidos na requisição
-        $validatedData = $request->validate([
+       
+       try{
+             $validatedData = $request->validate([
             'titulo' => 'required|max:15',
             'cor' => 'required|max:15'
-        ]);
+             ]);
 
-        // Cria uma nova categoria no banco de dados com os dados validados
-        $category = Category::create($validatedData);
 
-        // Retorna os dados validados em formato JSON
-        return response()->json($validatedData);
+            // Cria uma nova categoria no banco de dados com os dados validados
+            $category = Category::create($validatedData);
+
+            if($category->id == 1){
+                $category->titulo = 'Livre';
+                $category->save();
+            }
+
+            // Retorna os dados validados em formato JSON
+            return response()->json($validatedData);
+       } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'O campo não pode estar em branco.'
+         ]);
+       } 
     }
 
     /**
@@ -80,14 +94,22 @@ class CategoryController extends Controller
             ]);
         } else {
             // Atualiza os campos da categoria com base nos dados validados
-            if (array_key_exists('titulo', $validatedData)) {
+            if (array_key_exists('titulo', $validatedData) && ($category->id != 1)) {
                 $category->titulo = $validatedData['titulo'];
             }
             if (array_key_exists('cor', $validatedData)) {
                 $category->cor = $validatedData['cor'];
             }
-            $category->save();
+            $category->save();   
             
+            if($category->id == 1){
+                return response()->json([
+                    'message' => 'O título da categoria com id = 1 não pode ser atualizado',
+                    'category' => $category
+                ]);
+            }
+
+
             // Retorna a categoria atualizada em formato JSON
             return response()->json($category);
         }
