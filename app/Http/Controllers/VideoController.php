@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-
 class VideoController extends Controller
 {
     /**
@@ -26,28 +25,28 @@ class VideoController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    try {
-        // Valida os dados recebidos na requisição
-        $validatedData = $request->validate([
-            'categoriaId' => 'required|exists:categories,id',
-            'titulo' => 'required|max:30',
-            'descricao' => 'required|max:255',
-            'url' => 'required|url'
-        ]);
+    {
+        try {
+            // Valida os dados recebidos na requisição
+            $validatedData = $request->validate([
+                'categoriaId' => 'required|exists:categories,id',
+                'titulo' => 'required|max:30',
+                'descricao' => 'required|max:255',
+                'url' => 'required|url'
+            ]);
 
-        // Cria um novo vídeo no banco de dados com os dados validados
-        $video = Video::create($validatedData);
+            // Cria um novo vídeo no banco de dados com os dados validados
+            $video = Video::create($validatedData);
 
-        // Retorna os dados validados em formato JSON
-        return response()->json($validatedData);
-    } catch (ValidationException $e) {
-        // Captura a exceção de validação e retorna a resposta com os erros
-        return response()->json([
-            'errors' => $e->errors(),
-        ], 422); // Código HTTP 422 Unprocessable Entity indica erro de validação
+            // Retorna os dados validados em formato JSON
+            return response()->json($validatedData);
+        } catch (ValidationException $e) {
+            // Captura a exceção de validação e retorna a resposta com os erros
+            return response()->json([
+                'errors' => $e->errors(),
+            ], 422); // Código HTTP 422 Unprocessable Entity indica erro de validação
+        }
     }
-}
 
     /**
      * Display the specified resource.
@@ -56,8 +55,8 @@ class VideoController extends Controller
     {
         // Busca o vídeo com base no ID fornecido no banco de dados
         $video = DB::table('videos')
-                        ->where('id', $id)
-                        ->get();
+            ->where('id', $id)
+            ->get();
 
         // Verifica se o vídeo não foi encontrado
         if ($video->isEmpty()) {
@@ -106,7 +105,7 @@ class VideoController extends Controller
                 $video->url = $validatedData['url'];
             }
             $video->save();
-            
+
             // Retorna o vídeo atualizado em formato JSON
             return response()->json($video);
         }
@@ -134,5 +133,23 @@ class VideoController extends Controller
                 'message' => 'Success'
             ]);
         }
+    }
+
+    /**
+     * Search videos by name.
+     */
+    public function searchVideos(string $nome)
+    {
+        $videos = DB::table('videos')
+            ->where('titulo', 'LIKE', '%' . $nome . '%')
+            ->get();
+
+        if ($videos->isEmpty()) {
+            return response()->json([
+                'message' => 'Nenhum vídeo encontrado'
+            ]);
+        }
+
+        return response()->json($videos);
     }
 }

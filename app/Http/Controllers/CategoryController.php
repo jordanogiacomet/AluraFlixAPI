@@ -116,4 +116,16 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+    public function indexVideosbyCategory(string $id){
+        $category = Category::find($id);
+
+        if(!$category){
+            return response()->json([
+                'message' => 'Categoria não encontrada.'
+            ]);
+        }
+        $videos = $category->videos;
+        return response()->json($videos);
+    }
 }
