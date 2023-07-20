@@ -22,4 +22,20 @@ class CategoryFactory extends Factory
             'cor' => Str::random(10),
         ];
     }
+
+
+    /**
+     * Define the first category's state.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function firstCategory(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'titulo' => 'Livre',
+                'cor' => 'Minha cor',
+            ];
+        });
+    }
 }

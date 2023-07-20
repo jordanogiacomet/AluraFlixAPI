@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class VideoControllerTest extends TestCase
 {   
-    use RefreshDatabase;
+    
     public function testIndex()
     {
         // Chamada da rota para a função index
@@ -34,7 +34,7 @@ class VideoControllerTest extends TestCase
     
         // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
         $request = Request::create("/api/criar-video", 'POST', [
-            'categoriaId' => '5',
+            'categoriaId' => '1',
             'titulo' => 'Meu vídeo',
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
@@ -48,7 +48,7 @@ class VideoControllerTest extends TestCase
     
         // Verificação se os dados inseridos na requisição estão presentes no banco de dados
         $this->assertDatabaseHas('videos', [
-            'categoriaId' => '5',
+            'categoriaId' => '1',
             'titulo' => 'Meu vídeo',
             'descricao' => 'Descrição do vídeo',
             'url' => 'https://www.example.com/video'
@@ -87,7 +87,7 @@ public function testUpdate()
     $controller = new VideoController();
 
     // Definição do ID do vídeo a ser atualizado
-    $id = '6';
+    $id = '1';
 
     // Criação de um objeto de requisição simulada para a rota '/api/criar' com método POST e dados de exemplo
     $request = Request::create("/api/atualizar-video", 'PUT', [
@@ -112,7 +112,7 @@ public function testUpdate()
     ]);
 
     $requestWithError = Request::create("/api/atualizar-video", 'PUT', [
-        'categoriaId' => '5',
+        'categoriaId' => '2',
     ]);
     $responseWithError = $controller->update($requestWithError, $id);
      // Verificação se a resposta é de erro de validação (status 400)

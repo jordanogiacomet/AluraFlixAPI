@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CategoryControllerTest extends TestCase
 {
-    use RefreshDatabase;
+   
 
     /**
      * Testa a listagem de categorias.
@@ -100,34 +100,59 @@ class CategoryControllerTest extends TestCase
      * Testa a atualização de uma categoria com dados válidos.
      */
     public function testUpdate()
-    {
-        // Criação de uma instância do controlador
-        $controller = new CategoryController();
-    
-        // Definição do ID da categoria a ser atualizada
-        $id = '6';
-    
-        // Criação de um objeto de requisição simulada para a rota '/api/atualizar-categoria' com método PUT e dados de exemplo
-        $request = Request::create("/api/atualizar-categoria", 'PUT', [
-            'titulo' => 'Minha categoria',
-            'cor' => 'Minha cor'
-        ]);
-    
-        // Chamada do método update() no controlador com a requisição simulada e o ID da categoria
-        $response = $controller->update($request, $id);
-    
-        // Verificação do status da resposta, esperando que seja 200 (OK)
-        $this->assertEquals(200, $response->status());
-    
-        // Verificação se os dados atualizados estão presentes no banco de dados
-        $this->assertDatabaseHas('categories', [
-            'titulo' => 'Minha categoria',
-            'cor' => 'Minha cor'
-        ]);
+{
+    // Criação de uma instância do controlador
+    $controller = new CategoryController();
 
-        // Restante dos testes...
-    }
+    // Definição do ID da categoria a ser atualizada
+    $id = '2';
 
+    // Criação de um objeto de requisição simulada para a rota '/api/atualizar-categoria' com método PUT e dados de exemplo
+    $request = Request::create("/api/atualizar-categoria", 'PUT', [
+        'titulo' => 'Minha categoria',
+        'cor' => 'Minha cor'
+    ]);
+
+    // Chamada do método update() no controlador com a requisição simulada e o ID da categoria
+    $response = $controller->update($request, $id);
+
+    // Verificação do status da resposta, esperando que seja 200 (OK)
+    $this->assertEquals(200, $response->status());
+
+    // Verificação se os dados atualizados estão presentes no banco de dados
+    $this->assertDatabaseHas('categories', [
+        'titulo' => 'Minha categoria',
+        'cor' => 'Minha cor'
+    ]);
+
+    // Teste de atualização com apenas um parâmetro
+    $requestWithOneParameter = Request::create('/api/atualizar-categoria', 'PUT', [
+        'titulo' => 'Minha categoria'
+    ]);
+    $responseWithOneParameter = $controller->update($requestWithOneParameter, $id);
+    $this->assertEquals(200, $responseWithOneParameter->status());
+
+    // Teste de validação de dados (título com mais de 15 caracteres)
+    $requestWithValidationError = Request::create('/api/atualizar-categoria', 'PUT', [
+        'titulo' => 'Minha categoria com mais de 15 caracteres'
+    ]);
+    $responseWithValidationError = $controller->update($requestWithValidationError, $id);
+    $this->assertEquals(422, $responseWithValidationError->status());
+
+    // Teste de requisição sem parâmetros
+    $requestWithError = Request::create('/api/atualizar-categoria', 'PUT', []);
+    $responseWithError = $controller->update($requestWithError, $id);
+    $this->assertEquals(400, $responseWithError->status());
+
+    // Teste de atualização com ID de categoria inexistente
+    $requestWithInvalidCategoryId = Request::create("/api/atualizar-categoria", 'PUT', [
+        'titulo' => 'Minha categoria',
+        'cor' => 'Minha cor'
+    ]);
+
+    $responseWithInvalidCategoryId = $controller->update($requestWithInvalidCategoryId, '100000000');
+    $this->assertEquals(404, $responseWithInvalidCategoryId->status());
+}
     /**
      * Testa a exclusão de uma categoria.
      */
