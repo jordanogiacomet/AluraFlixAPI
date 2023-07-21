@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         // Obtém todas as categorias do banco de dados
-        $categories = Category::all();
+        $categories = Category::paginate(5);
 
         // Retorna as categorias em formato JSON
         return response()->json($categories);

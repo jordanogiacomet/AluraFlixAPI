@@ -15,7 +15,9 @@ class VideoController extends Controller
     public function index()
     {
         // Obtém todos os vídeos do banco de dados
-        $videos = Video::all();
+        $videos = Video::paginate(5);
+
+        
 
         // Retorna os vídeos em formato JSON
         return response()->json($videos);
