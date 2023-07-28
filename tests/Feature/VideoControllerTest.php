@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,6 +14,21 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class VideoControllerTest extends TestCase
 {   
     
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $controller = new UserController();
+
+        $request = Request::create('/api/register', 'POST', [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail,
+            'password' => 'senha'
+        ]);
+
+        $response = $controller->register($request);  
+    }
+
     public function testIndex()
     {
         // Chamada da rota para a função index

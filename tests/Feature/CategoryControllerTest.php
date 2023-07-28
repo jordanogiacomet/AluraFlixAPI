@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,11 +15,29 @@ class CategoryControllerTest extends TestCase
 {
    
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $controller = new UserController();
+
+        $request = Request::create('/api/register', 'POST', [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail,
+            'password' => 'senha'
+        ]);
+
+        $response = $controller->register($request);
+
+       
+    }
+
     /**
      * Testa a listagem de categorias.
      */
     public function testIndex()
     {
+
         // Chamada da rota para a função index
         $response = $this->get("/api/categories");
 
