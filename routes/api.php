@@ -22,6 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+
+Route::get('/free-videos', [VideoController::class, 'getFreeVideos']);
+
+
 Route::middleware('auth')->group(function(){
     
     // Vídeos

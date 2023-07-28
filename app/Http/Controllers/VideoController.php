@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Video;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -176,4 +177,14 @@ class VideoController extends Controller
 
         return response()->json($videos, 200);
     }
+
+
+    public function getFreeVideos(){
+        $category = Category::find(1);
+
+        $videos = $category->videos()->take(5)->get();
+
+        return response()->json($videos);
+    }
+
 }
