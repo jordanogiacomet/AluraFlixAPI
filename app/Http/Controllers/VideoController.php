@@ -47,7 +47,7 @@ class VideoController extends Controller
             $video = Video::create($validatedData);
 
             // Retorna os dados validados em formato JSON
-            return response()->json($validatedData);
+            return response()->json($validatedData, 200);
         } catch (ValidationException $e) {
             // Captura a exceção de validação e retorna a resposta com os erros
             return response()->json([

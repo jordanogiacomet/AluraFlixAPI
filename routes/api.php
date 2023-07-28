@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CategoryController;
 
@@ -37,3 +38,12 @@ Route::post('/criar-categoria', [CategoryController::class, 'store']);
 Route::put('/atualizar-categoria/{id}', [CategoryController::class, 'update']);
 Route::delete('/deletar-categoria/{id}', [CategoryController::class, 'destroy']);
 Route::get('/categories/{id}/videos', [CategoryController::class, 'indexVideosbyCategory']);
+
+// Users
+
+
+
+
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/logout', [UserController::class, 'logout']);
