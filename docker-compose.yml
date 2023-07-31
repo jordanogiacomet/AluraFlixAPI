@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aluraflix
+    container_name: aluraflix
+    restart: unless-stopped
+    ports:
+      - "8000:9000"
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: aluraflix
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: aluraflix
+      MYSQL_USER: Jordano
+      MYSQL_PASSWORD: 52488
+      MYSQL_ROOT_PASSWORD: 52488
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
