@@ -92,9 +92,9 @@ php artisan test
 A API possui a seguinte documentação:
 
 - **Rotas Públicas de Usuários:**
-  - `POST /login`: Realiza o login do usuário na plataforma.
-  - `POST /register`: Cria um novo usuário na plataforma.
-  - `POST /logout`: Desloga o usuário da plataforma.
+  - `POST /api/login`: Realiza o login do usuário na plataforma.
+  - `POST /api/register`: Cria um novo usuário na plataforma.
+  - `POST /api/logout`: Desloga o usuário da plataforma.
 
 - **Categorias:**
   - `GET /api/categories`: Listar todas as categorias
