@@ -21,7 +21,7 @@ COPY . /var/www
 
 # Instale as dependências do Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 # Execute o servidor PHP-FPM
 CMD ["php-fpm"]
