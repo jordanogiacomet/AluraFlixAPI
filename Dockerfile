@@ -1,5 +1,5 @@
 # Use uma imagem oficial do PHP com o Composer instalado
-FROM php:8.2.4-fpm
+FROM php:8.1-fpm
 
 # Definir variável de ambiente para permitir plugins como superusuário
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -16,15 +16,13 @@ RUN docker-php-ext-install zip
 # Definir o diretório de trabalho para /var/www
 WORKDIR /var/www
 
-# Copie o código-fonte do Laravel para o container
+# Copie o código-fonte do Laravel para o container, ignorando o diretório vendor
 COPY . /var/www
+COPY .dockerignore /var/www
 
 # Instale as dependências do Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --ignore-platform-reqs
 
-# Execute o servidor PHP-FPM
-CMD ["php-fpm"]
-
-# Expõe a porta 9000 do container
-EXPOSE 9000
+# Expõe a porta 8000 do container (sem a necessidade de mapeamento)
+EXPOSE 8000

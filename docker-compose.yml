@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: aluraflix
-    container_name: aluraflix
+    image: aluraflix-image
+    container_name: aluraflix-container
     restart: unless-stopped
     ports:
       - "8000:9000"
@@ -19,7 +19,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: aluraflix
+    container_name: aluraflix-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: aluraflix
