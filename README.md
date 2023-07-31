@@ -46,6 +46,24 @@ Para executar a AluraFlix API localmente ou implantá-la no Laravel Vapor, você
 
 Agora, a AluraFlix API está em execução localmente e você pode acessar a API em `http://localhost:8000`.
 
+## Utilização do Docker
+
+Para executar a AluraFlix API com o Docker, siga as etapas abaixo:
+
+1. **Pré-requisitos:**
+- Docker instalado na máquina
+
+2. **Clonando o Repositório:**
+    ```
+    git clone https://github.com/seu-usuario/aluraflix-api.git
+    cd aluraflix-api
+    ```
+3. **Construindo a Imagem Docker:**
+    ```
+   docker-compose up -d --build
+    ```
+Agora, a AluraFlix API está em execução localmente em um contêiner Docker e você pode acessar a API em `http://localhost:8000`.
+
 ## Implantação no Laravel Vapor
 
 Para implantar a AluraFlix API no Laravel Vapor, você precisa seguir as etapas a seguir:
