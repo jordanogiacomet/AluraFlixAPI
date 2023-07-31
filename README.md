@@ -91,6 +91,11 @@ php artisan test
 
 A API possui a seguinte documentação:
 
+- **Rotas Públicas de Usuários:**
+  - `POST /login: Realiza o login do usuário na plataforma.
+  - `POST /register: Cria um novo usuário na plataforma.
+  - `POST /logout: Desloga o usuário da plataforma.
+
 - **Categorias:**
   - `GET /api/categories`: Listar todas as categorias
   - `GET /api/categories/{id}`: Obter detalhes de uma categoria específica
@@ -99,6 +104,7 @@ A API possui a seguinte documentação:
   - `DELETE /api/deletar-categoria/{id}`: Excluir uma categoria
 
 - **Vídeos:**
+  - `GET /api/videos-free: Listar até 5 vídeos grátis associados à categoria livre
   - `GET /api/videos`: Listar todos os vídeos
   - `GET /api/videos/{id}`: Obter detalhes de um vídeo específico
   - `POST /api/criar-video`: Criar um novo vídeo
