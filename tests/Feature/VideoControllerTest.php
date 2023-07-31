@@ -224,5 +224,30 @@ class VideoControllerTest extends TestCase
         // Verificação do status da resposta, esperando que seja 404 (Not Found) devido à busca não encontrar vídeos com o termo 'categoria'
         $this->assertEquals(404, $responseNotFound->status());
     }
+
+    public function testGetFreeVideos()
+    {
+    
+
+        // Criação de 6 vídeos associados à categoria livre
+        $videos = Video::factory()->count(6)->create([
+            'categoriaId' => '1'
+        ]);
+
+        // Chama a rota para a função getFreeVideos
+        $response = $this->get('/api/videos-free');
+
+        // Verifica se a resposta possui o status HTTP 200 (OK)
+        $response->assertStatus(200);
+
+        // Verifica se o JSON retornado possui 5 vídeos
+        $response->assertJsonCount(5);
+
+        // Verifica se os vídeos retornados estão associados à categoria livre
+        foreach ($response->json() as $video) {
+            $this->assertEquals('1', $video['categoriaId']);
+        }
+    }
+
 }
     
