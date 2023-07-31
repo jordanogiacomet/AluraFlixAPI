@@ -1,7 +1,5 @@
 # AluraFlix API
 
-[![License](https://img.shields.io/github/license/seu-usuario/aluraflix-api)](https://opensource.org/licenses/MIT)
-
 Este é um repositório contendo o código-fonte da AluraFlix API, uma API desenvolvida em Laravel que permite gerenciar categorias e vídeos para uma plataforma de compartilhamento de conteúdo multimídia. A API é construída para ser implantada no Laravel Vapor, fornecendo um ambiente escalável e flexível na nuvem.
 
 ## Configuração do Ambiente
