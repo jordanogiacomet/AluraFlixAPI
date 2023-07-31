@@ -74,9 +74,6 @@ Para implantar a AluraFlix API no Laravel Vapor, você precisa seguir as etapas 
    ```
    vapor deploy docker-container
    ```
-
-3. **Siga as instruções do Vapor CLI para configurar a implantação no ambiente desejado**.
-
 A API será implantada em um ambiente escalável no Laravel Vapor.
 
 ### Testando no Postman
