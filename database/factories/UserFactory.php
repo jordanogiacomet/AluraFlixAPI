@@ -5,21 +5,22 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * Factory para a criação de registros da classe User.
  */
 class UserFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * Define o estado padrão do modelo (User).
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
+        // Define as colunas padrão do modelo e seus valores gerados aleatoriamente
         return [
-            'name' =>  fake()->name(),
-            'email' => fake()->safeEmail,
-            'password' => bcrypt('senha')
+            'name' =>  fake()->name(), // Gera um nome aleatório usando o Faker
+            'email' => fake()->safeEmail, // Gera um email aleatório usando o Faker
+            'password' => bcrypt('senha') // Define a senha como 'senha' criptografada usando bcrypt
         ];
     }
 }

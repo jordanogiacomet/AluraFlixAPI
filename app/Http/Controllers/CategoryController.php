@@ -11,6 +11,8 @@ class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * Retorna uma lista paginada de todas as categorias do banco de dados em formato JSON.
      */
     public function index()
     {
@@ -23,44 +25,50 @@ class CategoryController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * Armazena uma nova categoria no banco de dados com os dados recebidos na requisição.
+     * Retorna os dados validados da categoria em formato JSON.
      */
     public function store(Request $request)
     {
-        // Valida os dados recebidos na requisição
-       
-       try{
-             $validatedData = $request->validate([
-            'titulo' => 'required|max:15',
-            'cor' => 'required|max:15'
-             ]);
-
+        try {
+            // Valida os dados recebidos na requisição
+            $validatedData = $request->validate([
+                'titulo' => 'required|max:15',
+                'cor' => 'required|max:15'
+            ]);
 
             // Cria uma nova categoria no banco de dados com os dados validados
             $category = Category::create($validatedData);
 
-            if($category->id == 1){
+            // Caso o ID da categoria seja 1, define o título como 'Livre' e salva a categoria
+            if ($category->id == 1) {
                 $category->titulo = 'Livre';
                 $category->save();
             }
 
-            // Retorna os dados validados em formato JSON
+            // Retorna os dados validados da categoria em formato JSON
             return response()->json($validatedData);
-       } catch (ValidationException $e) {
+        } catch (ValidationException $e) {
+            // Retorna uma resposta com erros de validação em caso de falha na validação
             return response()->json([
                 'errors' => $e->errors(),
-         ], 422);
-       } 
+            ], 422);
+        }
     }
 
     /**
      * Display the specified resource.
+     *
+     * Busca uma categoria específica com base no ID fornecido no banco de dados.
+     * Retorna a categoria encontrada em formato JSON.
      */
     public function show(string $id)
     {
         // Busca a categoria com base no ID fornecido no banco de dados
         $category = DB::table('categories')
-                        ->where('id', $id)
-                        ->get();
+            ->where('id', $id)
+            ->get();
 
         // Verifica se a categoria não foi encontrada
         if ($category->isEmpty()) {
@@ -75,18 +83,20 @@ class CategoryController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * Atualiza os campos de uma categoria específica com base nos dados recebidos na requisição.
+     * Retorna a categoria atualizada em formato JSON.
      */
     public function update(Request $request, string $id)
     {
-
-
-        if(empty($request->all())){
+        // Verifica se a requisição não possui dados para atualização
+        if (empty($request->all())) {
             return response()->json([
-                'message' => 'Não foi possivel editar essa categoria'
+                'message' => 'Não foi possível editar essa categoria'
             ], 400);
         }
 
-        try{
+        try {
             // Valida os dados recebidos na requisição
             $validatedData = $request->validate([
                 'titulo' => 'max:15',
@@ -109,28 +119,32 @@ class CategoryController extends Controller
                 if (array_key_exists('cor', $validatedData)) {
                     $category->cor = $validatedData['cor'];
                 }
-                $category->save();   
-                
-                if($category->id == 1){
+                $category->save();
+
+                // Caso o ID da categoria seja 1, retorna uma mensagem informando que o título não pode ser atualizado
+                if ($category->id == 1) {
                     return response()->json([
                         'message' => 'O título da categoria com id = 1 não pode ser atualizado',
                         'category' => $category
                     ]);
                 }
 
-
                 // Retorna a categoria atualizada em formato JSON
                 return response()->json($category);
             }
         } catch (ValidationException $e) {
+            // Retorna uma resposta com erros de validação em caso de falha na validação
             return response()->json([
                 'errors' => $e->errors(),
-         ], 422);
-       } 
+            ], 422);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * Remove uma categoria específica com base no ID fornecido no banco de dados.
+     * Retorna uma resposta de sucesso em formato JSON.
      */
     public function destroy(string $id)
     {
@@ -153,15 +167,28 @@ class CategoryController extends Controller
         }
     }
 
-    public function indexVideosbyCategory(string $id){
+    /**
+     * Display a listing of videos by category.
+     *
+     * Busca todos os vídeos associados a uma categoria específica com base no ID fornecido.
+     * Retorna uma lista de vídeos em formato JSON.
+     */
+    public function indexVideosbyCategory(string $id)
+    {
+        // Busca a categoria com base no ID fornecido no banco de dados
         $category = Category::find($id);
 
-        if(!$category){
+        // Verifica se a categoria não foi encontrada
+        if (!$category) {
             return response()->json([
                 'message' => 'Categoria não encontrada.'
             ], 404);
         }
+
+        // Obtém os vídeos associados à categoria
         $videos = $category->videos;
+
+        // Retorna a lista de vídeos em formato JSON
         return response()->json($videos, 200);
     }
 }

@@ -12,13 +12,13 @@ class VideoController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * Obtém todos os vídeos do banco de dados e retorna-os em formato JSON.
      */
     public function index()
     {
-        // Obtém todos os vídeos do banco de dados
+        // Obtém todos os vídeos do banco de dados paginados, com 5 vídeos por página
         $videos = Video::paginate(5);
-
-        
 
         // Retorna os vídeos em formato JSON
         return response()->json($videos);
@@ -26,6 +26,9 @@ class VideoController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * Cria um novo vídeo no banco de dados com base nos dados recebidos na requisição.
+     * Retorna uma resposta de sucesso em formato JSON contendo os dados validados do vídeo.
      */
     public function store(Request $request)
     {
@@ -38,11 +41,10 @@ class VideoController extends Controller
                 'url' => 'required|url'
             ]);
 
-
-            if(!$request->has('categoriaId')){
+            // Se o campo 'categoriaId' não estiver presente na requisição, define o valor padrão como 1
+            if (!$request->has('categoriaId')) {
                 $validatedData['categoriaId'] = 1;
             }
-
 
             // Cria um novo vídeo no banco de dados com os dados validados
             $video = Video::create($validatedData);
@@ -59,6 +61,9 @@ class VideoController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * Busca um vídeo específico com base no ID fornecido no banco de dados.
+     * Retorna o vídeo encontrado em formato JSON.
      */
     public function show(string $id)
     {
@@ -80,17 +85,18 @@ class VideoController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * Atualiza os campos de um vídeo específico com base nos dados recebidos na requisição.
+     * Retorna o vídeo atualizado em formato JSON.
      */
     public function update(Request $request, string $id)
     {
-
-        if((!$request->filled('titulo')) && (!$request->filled('descricao')) && (!$request->filled('url'))){
+        // Verifica se pelo menos um campo (título, descrição, URL ou categoriaId) foi preenchido para a edição
+        if ((!$request->filled('titulo')) && (!$request->filled('descricao')) && (!$request->filled('url'))) {
             return response()->json([
-                'message' => 'Pelo menos um campo deve ser preenchido para a edicão'
+                'message' => 'Pelo menos um campo deve ser preenchido para a edição'
             ], 400);
         }
-
-
 
         // Valida os dados recebidos na requisição
         $validatedData = $request->validate([
@@ -100,9 +106,10 @@ class VideoController extends Controller
             'url' => 'url'
         ]);
 
-        if(!$request->has('categoriaId')){
-                $validatedData['categoriaId'] = 1;
-            }
+        // Se o campo 'categoriaId' não estiver presente na requisição, define o valor padrão como 1
+        if (!$request->has('categoriaId')) {
+            $validatedData['categoriaId'] = 1;
+        }
 
         // Busca o vídeo com base no ID fornecido no banco de dados
         $video = Video::find($id);
@@ -135,6 +142,9 @@ class VideoController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * Remove um vídeo específico com base no ID fornecido no banco de dados.
+     * Retorna uma resposta de sucesso em formato JSON.
      */
     public function destroy(string $id)
     {
@@ -159,32 +169,46 @@ class VideoController extends Controller
 
     /**
      * Search videos by name.
+     *
+     * Busca vídeos no banco de dados com base no nome fornecido na requisição.
+     * Retorna uma lista de vídeos encontrados em formato JSON.
      */
     public function searchVideos(Request $request)
     {
-
+        // Obtém o nome a ser pesquisado a partir dos parâmetros da requisição
         $nome = $request->query('search');
 
+        // Busca vídeos no banco de dados com base no nome fornecido, usando o operador LIKE para pesquisa parcial
         $videos = DB::table('videos')
             ->where('titulo', 'LIKE', '%' . $nome . '%')
             ->get();
 
+        // Verifica se não foram encontrados vídeos com o nome fornecido
         if ($videos->isEmpty()) {
             return response()->json([
                 'message' => 'Nenhum vídeo encontrado'
             ], 404);
         }
 
+        // Retorna a lista de vídeos encontrados em formato JSON
         return response()->json($videos, 200);
     }
 
-
-    public function getFreeVideos(){
+    /**
+     * Get free videos.
+     *
+     * Obtém uma lista de vídeos associados à categoria de ID 1 (categoria livre).
+     * Retorna a lista de vídeos em formato JSON.
+     */
+    public function getFreeVideos()
+    {
+        // Busca a categoria com ID 1 (categoria livre) no banco de dados
         $category = Category::find(1);
 
+        // Obtém uma lista de até 5 vídeos associados à categoria livre
         $videos = $category->videos()->take(5)->get();
 
+        // Retorna a lista de vídeos em formato JSON
         return response()->json($videos);
     }
-
 }

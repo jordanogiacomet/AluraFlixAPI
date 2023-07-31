@@ -11,33 +11,33 @@ use App\Http\Controllers\CategoryController;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| Aqui é onde você pode registrar as rotas da API para a sua aplicação.
+| Essas rotas são carregadas pelo RouteServiceProvider e todas elas
+| serão atribuídas ao grupo de middleware "api". Faça algo incrível!
 |
 */
 
+// Rota para obter informações do usuário autenticado usando o middleware Sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
+// Rota para obter todos os vídeos gratuitos
 Route::get('/videos-free', [VideoController::class, 'getFreeVideos']);
 
-
-Route::middleware('auth')->group(function(){
+// Grupo de rotas protegidas pelo middleware de autenticação
+Route::middleware('auth')->group(function () {
     
-    // Vídeos
+    // Rotas para operações de Vídeos
 
-    Route::get('/videos', [VideoController::class, 'index'])->middleware('auth');
+    Route::get('/videos', [VideoController::class, 'index']);
     Route::get('/videos/{id}', [VideoController::class, 'show']);
     Route::post('/criar-video', [VideoController::class, 'store']);
     Route::put('/atualizar-video/{id}', [VideoController::class, 'update']);
     Route::delete('/deletar-video/{id}', [VideoController::class, 'destroy']);
     Route::get('/buscar-videos', [VideoController::class, 'searchVideos']);
 
-    // Categorias
+    // Rotas para operações de Categorias
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
@@ -48,14 +48,15 @@ Route::middleware('auth')->group(function(){
 
 });
 
-// Users
+// Rotas públicas de usuários
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/logout', [UserController::class, 'logout']);
 
-Route::get('/error-message', function(){
+// Rota para exibir uma mensagem de erro para usuários não autenticados
+Route::get('/error-message', function () {
     return response()->json([
-        'message' => 'User not authenticated'
+        'message' => 'Usuário não autenticado'
     ]);
 })->name('error-message');

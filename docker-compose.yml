@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.8"  # Versão do Docker Compose sendo utilizada
 
 services:
   app:
@@ -9,28 +9,28 @@ services:
     container_name: aluraflix-container
     restart: unless-stopped
     ports:
-      - "8000:9000"
+      - "8000:9000"  # Faz o redirecionamento da porta 8000 do host para a porta 9000 do contêiner
     volumes:
-      - .:/var/www
+      - .:/var/www  # Monta um volume que compartilha a pasta atual do host com a pasta /var/www do contêiner
     networks:
-      - app-network
+      - app-network  # Conecta o contêiner à rede "app-network" para que os serviços possam se comunicar
     depends_on:
-      - db
+      - db  # Indica que o serviço "app" depende do serviço "db" (MySQL) e garante que o banco de dados esteja disponível antes de iniciar o aplicativo
 
   db:
-    image: mysql:8.0
+    image: mysql:8.0  # Usa a imagem oficial do MySQL versão 8.0 para criar o contêiner do banco de dados
     container_name: aluraflix-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: aluraflix
-      MYSQL_USER: Jordano
-      MYSQL_PASSWORD: 52488
-      MYSQL_ROOT_PASSWORD: 52488
+      MYSQL_DATABASE: aluraflix  # Define o nome do banco de dados
+      MYSQL_USER: Jordano  # Define o nome do usuário do banco de dados
+      MYSQL_PASSWORD: 52488  # Define a senha do usuário do banco de dados
+      MYSQL_ROOT_PASSWORD: 52488  # Define a senha do usuário root do MySQL
     ports:
-      - "3306:3306"
+      - "3306:3306"  # Faz o redirecionamento da porta 3306 do host para a porta 3306 do contêiner (porta padrão do MySQL)
     networks:
-      - app-network
+      - app-network  # Conecta o contêiner à rede "app-network" para que os serviços possam se comunicar
 
 networks:
-  app-network:
-    driver: bridge
+  app-network:  # Define a rede chamada "app-network"
+    driver: bridge  # Define o driver da rede como "bridge", que é a configuração padrão e permite a comunicação entre os contêineres na mesma rede

@@ -9,6 +9,10 @@ class Video extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['categoriaId','titulo', 'descricao', 'url'];
-
+    /**
+     * Atributos que podem ser preenchidos em massa (mass assignable).
+     *
+     * @var array
+     */
+    protected $fillable = ['categoriaId', 'titulo', 'descricao', 'url'];
 }
