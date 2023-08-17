@@ -84,17 +84,17 @@ A API será implantada em um ambiente escalável no Laravel Vapor.
 
 ### Testando no Postman
 
-1. **Abra o Postman ou outra ferramenta de API Client**.
+1. Abra o Postman ou outra ferramenta de API Client**.
 
-2. **Configure a URL base da API para `https://7c226xuu6dijldckl3broltmnu0kryki.cell-1-lambda-url.us-east-1.on.aws/`**.
+2. Configure a URL base da API para `https://7c226xuu6dijldckl3broltmnu0kryki.cell-1-lambda-url.us-east-1.on.aws/`**.
 
-3. **Escolha uma rota da API que deseja testar e selecione o método HTTP correto (por exemplo, GET, POST, PUT ou DELETE)**.
+3. Escolha uma rota da API que deseja testar e selecione o método HTTP correto (por exemplo, GET, POST, PUT ou DELETE)**.
 
-4. **Se necessário, forneça os parâmetros ou dados da requisição**.
+4. Se necessário, forneça os parâmetros ou dados da requisição**.
 
-5. **Envie a requisição para a API**.
+5. Envie a requisição para a API**.
 
-6. **Observe a resposta da API para verificar se os resultados estão corretos**.
+6. Observe a resposta da API para verificar se os resultados estão corretos**.
 
 ## Testes
 
