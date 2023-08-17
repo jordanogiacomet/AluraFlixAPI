@@ -1,3 +1,9 @@
+# 🚧 Em Construção e Testes 🚧
+
+Este projeto ainda está em fase de construção e testes. Algumas funcionalidades podem não estar completas ou podem passar por mudanças significativas. Agradeço a compreensão e peço que relatem qualquer problema ou sugestão que possa surgir ao utilizar esta API.
+
+---
+
 # AluraFlix API
 
 Este é um repositório contendo o código-fonte da AluraFlix API, uma API desenvolvida em Laravel que permite gerenciar categorias e vídeos para uma plataforma de compartilhamento de conteúdo multimídia. A API é construída para ser implantada no Laravel Vapor, fornecendo um ambiente escalável e flexível na nuvem.
